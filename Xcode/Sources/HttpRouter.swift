@@ -123,8 +123,9 @@ open class HttpRouter {
         if index < count, let pathToken = pattern[index].removingPercentEncoding {
 
             var currentIndex = index + 1
-            let variableNodes = node.nodes.filter { $0.0.first == ":" }
-            if let variableNode = variableNodes.first {
+            let exactVariableNodes = node.nodes.filter { $0.key == pathToken }
+            let matchingVariableNodes = node.nodes.filter { $0.0.first == ":" }
+            if let variableNode = exactVariableNodes.first ?? matchingVariableNodes.first {
                 if currentIndex == count && variableNode.1.isEndOfRoute {
                     // if it's the last element of the pattern and it's a variable, stop the search and
                     // append a tail as a value for the variable.
